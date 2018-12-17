@@ -1,0 +1,32 @@
+# optional (unless used in your yaml data below) - can be overridden by upstream properties using the same name
+buildProperties:
+        # global build control defaults -- see others you can override in resources/config/buildProperties.yaml
+        # These are understood by the shared pipeline libraries:
+        BUILD_PLAN_ID                  : Master Suite Snapshot Build
+
+        MAVEN_DEFAULT_COMMAND_OPTIONS  : -B -e
+        ARCHIVE_ARTIFACTS              : false
+        MAVEN_RESOLVE_REPO_URL         : http://public.nexus.pentaho.org/content/groups/omni
+
+jobGroups:
+  # Always required
+
+  200:
+
+     - jobID           :  coding-standards
+       scmUrl          :  ${PENTAHO_SCM_ROOT}/pentaho-coding-standards.git
+       versionProperty :  coding-standards.version
+       testable        :  false
+
+  300:
+
+     - jobID           :  parent-poms
+       scmUrl          :  ${PENTAHO_SCM_ROOT}/maven-parent-poms.git
+       versionProperty :  pentaho.version
+
+  600:
+
+     - jobID           :  database-model
+       scmUrl          :  ${PENTAHO_SCM_ROOT}/pentaho-commons-database.git
+       directives      :  += -pl .,model
+       versionProperty :  commons-database.version
